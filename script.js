@@ -11,50 +11,36 @@ function appendToViewbox(text) {
     selectId("viewbox").innerHTML += text;
 }
 
-selectId("buttons").addEventListener("click", function (event) {
-    id = event.target.id;
-    if (parseInt(id))
-        onNumberPress(parseInt(id));
-
-    if (id === "+" || id === "-" || id === "*" || id === "/")
-        onOperationPress(id);
-
-    if (id === "=")
-        onEnterPress();
-
-    if (id === "C")
-        onCPress();
-
-    if (id === "CE")
-        onCEPress();
-})
-
-function onNumberPress(number) {
-    num1 = num1 * 10 + number;
-    writeToViewbox(num1);
+function getViewboxText() {
+    return selectId("viewbox").innerHTML;
 }
 
-function onOperationPress(operation) {
-    console.log(operation);
+var buttons = document.getElementsByTagName("button");
+for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function (event) {
+        id = event.target.id;
+
+        if (id === "C")
+            onCPress();
+
+        else if (id === "CE")
+            onCEPress();
+
+        else if (id === "=")
+            onEnterPress();
+        else
+            appendToViewbox(id);
+    });
 }
 
 function onEnterPress() {
-
+    writeToViewbox(eval(getViewboxText()));
 }
 
 function onCPress() {
-
+    writeToViewbox("");
 }
 
 function onCEPress() {
-
+    writeToViewbox(getViewboxText().slice(0, -1));
 }
-
-function init() {
-    state = "num1";
-    num1 = 0;
-    writeToViewbox(num1);
-}
-init();
-var state;
-var num1;
